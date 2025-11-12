@@ -1,0 +1,42 @@
+.app-header {
+  background-color: #282c34;
+  padding: 1rem 2rem;
+  color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.main-nav .nav-list {
+  list-style: none;
+  display: flex;
+  margin: 0;
+  padding: 0;
+  gap: 2rem; /* Khoảng cách giữa các mục */
+}
+
+.nav-item a,
+.nav-item button {
+  color: white;
+  text-decoration: none;
+  font-size: 1.1rem;
+  font-weight: 500;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  transition: background-color 0.3s ease, color 0.3s ease;
+  cursor: pointer;
+  background: none;
+  border: none;
+  font-family: inherit; /* Kế thừa font từ body */
+}
+
+.nav-item a:hover,
+.nav-item button:hover {
+  background-color: #4a5260;
+}
+
+.nav-item a.active {
+  background-color: #007bff; /* Màu xanh dương nhạt khi active */
+  color: white;
+}
