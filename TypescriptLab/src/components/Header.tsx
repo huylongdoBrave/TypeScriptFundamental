@@ -25,19 +25,25 @@ function Header() {
 
   return (
     <header className="app-header">
-      <nav className="main-nav">
-        <ul className="nav-list">
-          {/* Sử dụng NavLink cho các trang riêng và button cho các mục cuộn */}
-          <li className="nav-item"><button onClick={() => handleScroll('home-section')}>Trang Chủ</button></li>
-          <li className="nav-item"><button onClick={() => handleScroll('products-section')}>Sản Phẩm</button></li>
-          <li className="nav-item">
-            <NavLink to="/about" className={({ isActive }) => (isActive ? 'active' : '')}>Giới Thiệu</NavLink>
-          </li>
-          <li className="nav-item">
-            <NavLink to="/contact" className={({ isActive }) => (isActive ? 'active' : '')}>Liên Hệ</NavLink>
-          </li>
-        </ul>
-      </nav>
+    <nav className="main-nav">
+    <ul className="nav-list">
+        <li className="nav-item">
+        <NavLink to="/" onClick={()=>handleScroll('home-section')} className={({ isActive }) => (isActive ? 'active' : '')}>Home</NavLink>
+        </li>
+        <li className="nav-item">
+        <NavLink to="/products-section" onClick={()=>handleScroll('products-section')} className={({ isActive }) => (isActive ? 'active' : '')}>Sản phẩm</NavLink>
+        </li>
+        <li className="nav-item">
+        <NavLink to="/about" onClick={()=>handleScroll('about-section')} className={({ isActive }) => (isActive ? 'active' : '')}>Giới Thiệu</NavLink>
+        </li>
+        <li className="nav-item">
+        <NavLink to="/contact" onClick={()=>handleScroll('contact-section')} className={({ isActive }) => (isActive ? 'active' : '')}>Liên Hệ</NavLink>
+        </li>
+        <li className="nav-item">
+        <NavLink to="/prizes" onClick={()=>handleScroll('prizes-section')} className={({ isActive }) => (isActive ? 'active' : '')}>Quà tặng</NavLink>
+        </li>
+    </ul>
+    </nav>
     </header>
   );
 }

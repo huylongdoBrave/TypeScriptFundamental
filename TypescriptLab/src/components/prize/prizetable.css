@@ -1,0 +1,64 @@
+.prize-table-container {
+  margin: 2rem;
+  padding: 2rem;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  color: #333;
+}
+
+.prize-table-container h1 {
+  text-align: center;
+  color: #282c34;
+  margin-bottom: 1.5rem;
+}
+
+.prize-data-table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+}
+
+.prize-data-table th,
+.prize-data-table td {
+  padding: 12px 15px;
+  border-bottom: 1px solid #ddd;
+}
+
+.prize-data-table th {
+  background-color: #f4f4f4;
+  font-weight: 600;
+}
+
+.prize-data-table tbody tr:hover {
+  background-color: #f9f9f9;
+}
+
+.prize-image {
+  width: 60px;
+  height: 60px;
+  object-fit: cover;
+  border-radius: 4px;
+}
+
+.status {
+  padding: 5px 10px;
+  border-radius: 12px;
+  color: white;
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+.status-active {
+  background-color: #28a745; /* Màu xanh lá */
+}
+
+.status-inactive {
+  background-color: #dc3545; /* Màu đỏ */
+}
+
+/* Căn giữa nội dung các cột trừ cột đầu tiên */
+.prize-data-table td:not(:first-child),
+.prize-data-table th:not(:first-child) {
+  text-align: center;
+}

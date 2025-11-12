@@ -1,6 +1,7 @@
 .app-header {
   background-color: #282c34;
-  padding: 1rem 2rem;
+  width: 100%;
+  padding: 10px 10px;
   color: white;
   display: flex;
   justify-content: center;
