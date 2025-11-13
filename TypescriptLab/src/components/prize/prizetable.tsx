@@ -28,9 +28,8 @@ function PrizeTable() {
         if (localStorage.getItem(LOCAL_STORAGE_KEY)) {
             const storedPrizes = JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY) || '[]');
             setPrizes(storedPrizes);
-            
             return;
-        }else {
+        } else {
             localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(mockPrizes));
         } 
     } catch (e) {

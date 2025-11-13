@@ -8,6 +8,7 @@ import Header from './components/Header.tsx'
 import Footer from './components/Footer.tsx'
 import { Route, Routes } from 'react-router-dom'
 import PrizeTable from './components/prize/prizetable.tsx';
+import { Button } from 'antd';
 
 function App() {
 
@@ -19,16 +20,19 @@ function App() {
         <Route path="/" element={
           <main className="main-content">
             <section id="home-section" className="app-section">
-              <h1>Trang Chủ</h1>
-              <p>Chào mừng đến với Typescript Lab!</p>
+              <p>Home</p><br /><br />
+                <h1 className="text-3xl font-bold underline"> Tailwind style</h1><br /><br />
+                <button className="bg-sky-700 px-4 py-2 text-white hover:bg-sky-800 sm:px-8 sm:py-3">Tailwind button</button><br /><br />
+                <Button type="primary">Ant Design Button</Button>
             </section>
           </main>
         } />
+
         <Route path="/products-section" element={
           <main className="main-content">
             <section id="products-section" className="app-section">
               <h1>Sản Phẩm</h1>
-              <p>Đây là danh sách các sản phẩm của chúng tôi.</p>
+              <p>Đây là danh sách các sản phẩm</p>
             </section>
           </main>} />
         <Route path="/about" element={

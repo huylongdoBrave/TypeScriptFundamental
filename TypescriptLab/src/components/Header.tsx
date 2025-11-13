@@ -6,18 +6,19 @@ import { NavLink, useLocation, useNavigate } from 'react-router-dom';
 import './Header.css';
 
 function Header() {
-
+  //Lấy navigate
   const navigate = useNavigate();
+  //Lấy đối tượng
   const location = useLocation();
 
-  // Hàm xử lý cuộn mượt mà
+  // Hàm xử lý cuộn
   const handleScroll = (sectionId: string) => {
     // Nếu không ở trang chủ, chuyển về trang chủ trước rồi mới cuộn
     if (location.pathname !== '/') {
       navigate('/');
       setTimeout(() => {
         document.getElementById(sectionId)?.scrollIntoView({ behavior: 'smooth' });
-      }, 100);
+      }, 200);
     } else {
       document.getElementById(sectionId)?.scrollIntoView({ behavior: 'smooth' });
     }
