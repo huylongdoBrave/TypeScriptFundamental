@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import './prizetable.css'; // Import file CSS
+import PrizeModal from './PrizeModal'; // Đổi tên import
 
 // Định nghĩa kiểu dữ liệu cho một giải thưởng
-interface Prize {
+export interface Prize { // Export interface để component khác có thể dùng
   id: number;
   name: string;
   quantity: number;
@@ -21,53 +21,126 @@ const mockPrizes: Prize[] = [
 ];
 
 function PrizeTable() {
-  const [prizes, setPrizes] = useState<Prize[]>([]);
+  const [prizes, setPrizes] = useState<Prize[]>([]); //state chứa object của prize và khởi tạo mảng rỗng
+  const [isModalOpen, setIsModalOpen] = useState(false); // State cho cả add và edit modal
+  const [prizeToEdit, setPrizeToEdit] = useState<Prize | null>(null);
 
   useEffect(() => {
-    try {
-        if (localStorage.getItem(LOCAL_STORAGE_KEY)) {
-            const storedPrizes = JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY) || '[]');
-            setPrizes(storedPrizes);
-            return;
-        } else {
-            localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(mockPrizes));
-        } 
-    } catch (e) {
-        setPrizes(mockPrizes);
-      console.error('Lỗi khi truy xuất localStorage:', e);
-    }
 
+    try {
+      const item = localStorage.getItem(LOCAL_STORAGE_KEY);
+      const initialPrizes = item ? JSON.parse(item) : mockPrizes; // Check local data nếu có, ngược lại lấy mock
+      setPrizes(initialPrizes);
+      
+      if (!item) { // Nếu chưa có dữ liệu trong localStorage, lưu dữ liệu mẫu vào.
+        localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(mockPrizes));
+      }
+    } catch (error) {
+      console.error('Lỗi khi xử lý localStorage, sử dụng dữ liệu mẫu:', error);
+      setPrizes(mockPrizes); // Fallback nếu có lỗi (ví dụ: JSON không hợp lệ)
+    }
   }, []);
 
+  // Hàm xử lý xóa giải thưởng
+  const handleDeletePrize = (prizeId: number) => {
+    // Hiển thị hộp thoại xác nhận
+    if (window.confirm('Bạn có chắc chắn muốn xóa giải thưởng này không?')) {
+      const updatedPrizes = prizes.filter(p => p.id !== prizeId);
+      setPrizes(updatedPrizes);
+      localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(updatedPrizes));
+    }
+  };
+
+  // Hàm xử lý lưu (thêm mới hoặc cập nhật)
+  const handleSavePrize = (prizeData: Omit<Prize, 'id'> | Prize) => {
+    // Kiểm tra xem có 'id' không để biết là thêm mới hay cập nhật
+    if ('id' in prizeData) {
+      // Chế độ cập nhật
+      const updatedPrizes = prizes.map(p => p.id === prizeData.id ? prizeData : p);
+      setPrizes(updatedPrizes);
+      localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(updatedPrizes));
+
+    } else {
+      // Chế độ thêm mới
+      const newId = prizes.length > 0 ? Math.max(...prizes.map(p => p.id)) +1  :  1;
+      const newPrize = { ...prizeData, id: newId };
+      const updatedPrizes = [...prizes, newPrize];
+      setPrizes(updatedPrizes);
+      localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(updatedPrizes));
+    }
+  };
+
+  // Mở modal ở chế độ thêm mới
+  const handleOpenAddModal = () => {
+    setPrizeToEdit(null);
+    setIsModalOpen(true);
+  };
+
+  // Mở modal ở chế độ sửa
+  const handleOpenEditModal = (prize: Prize) => {
+    setPrizeToEdit(prize);
+    setIsModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+    setPrizeToEdit(null); // Reset prize đang sửa khi đóng modal
+  };
+
   return (
-    <div className="prize-table-container">
-      <h1>Bảng Quản Lý Giải Thưởng</h1>
-      <table className="prize-data-table">
+    <div className="m-8 p-8 bg-white rounded-lg shadow-md text-gray-800">
+      <div className="flex justify-between items-center mb-6">
+        <h1 className="text-2xl font-bold text-gray-900">Bảng Quản Lý Giải Thưởng</h1>
+        <button 
+          onClick={handleOpenAddModal}
+          className="bg-blue-600 text-white font-bold py-2 px-4 rounded-lg hover:bg-blue-700 transition-colors"
+        >Thêm Mới</button>
+      </div>
+      <table className="w-full border-collapse text-left">
         <thead>
           <tr>
-            <th>Tên Giải Thưởng</th>
-            <th>Số Lượng</th>
-            <th>Hình Ảnh</th>
-            <th>Tình Trạng</th>
+            <th className="py-3 px-4 bg-gray-100 font-semibold border-b border-gray-200">Tên Giải Thưởng</th>
+            <th className="py-3 px-4 bg-gray-100 font-semibold border-b border-gray-200 text-center">Số Lượng</th>
+            <th className="py-3 px-4 bg-gray-100 font-semibold border-b border-gray-200 text-center">Hình Ảnh</th>
+            <th className="py-3 px-4 bg-gray-100 font-semibold border-b border-gray-200 text-center">Tình Trạng</th>
+            <th className="py-3 px-4 bg-gray-100 font-semibold border-b border-gray-200 text-center">Hành Động</th>
           </tr>
         </thead>
         <tbody>
           {prizes.map((prize) => (
-            <tr key={prize.id}>
-              <td>{prize.name}</td>
-              <td>{prize.quantity}</td>
-              <td>
-                <img src={prize.type} alt={prize.name} className="prize-image" />
+            <tr key={prize.id} className="hover:bg-gray-50">
+              <td className="py-3 px-4 border-b border-gray-200">{prize.name}</td>
+              <td className="py-3 px-4 border-b border-gray-200 text-center">{prize.quantity}</td>
+              <td className="py-3 px-4 border-b border-gray-200 text-center">
+                <img src={prize.type} alt={prize.name} className="w-16 h-16 object-cover rounded inline-block" />
               </td>
-              <td>
-                <span className={`status ${prize.status ? 'status-active' : 'status-inactive'}`}>
+              <td className="py-3 px-4 border-b border-gray-200 text-center">
+                <span className={`py-1 px-3 rounded-full text-white text-sm font-semibold ${prize.status ? 'bg-green-500' : 'bg-red-500'}`}>
                   {prize.status ? 'Hoạt động' : 'Tạm ngưng'}
                 </span>
+              </td>
+              <td className="py-3 px-4 border-b border-gray-200 text-center">
+                <div className="flex justify-center gap-2">
+                  <button 
+                    onClick={() => handleOpenEditModal(prize)}
+                    className="bg-yellow-500 text-white px-3 py-1 rounded-md text-sm font-semibold hover:bg-yellow-600"
+                  >Sửa</button>
+                  <button 
+                    onClick={() => handleDeletePrize(prize.id)}
+                    className="bg-red-500 text-white px-3 py-1 rounded-md text-sm font-semibold hover:bg-red-600"
+                  >Xóa</button>
+                </div>
               </td>
             </tr>
           ))}
         </tbody>
       </table>
+      <PrizeModal 
+        isOpen={isModalOpen}
+        onClose={handleCloseModal}
+        onSave={handleSavePrize}
+        prizeToEdit={prizeToEdit}
+      />
     </div>
   );
 }
